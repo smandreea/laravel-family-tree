@@ -10,30 +10,33 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    public const FEMALE = 1;
+    public const MALE = 1;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        "first_name",
+        "middle_name",
+        "last_name",
+        "gender",
+        "relationship",
+        "related_member"
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+    protected $table = 'users';
+
+    protected $with = ['children'];
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
+     * @return mixed
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function children()
+    {
+        return $this->hasMany(FamilyMember::class, 'parent_id', 'id');
+    }
+
 }
